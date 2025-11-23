@@ -1,7 +1,7 @@
 [project]
 name = "purple-cli"
 dynamic = ["version"]
-description = "Add your description here"
+description = "Tool to obtain information from your Twitch account.:"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [

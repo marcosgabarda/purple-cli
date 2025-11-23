@@ -45,7 +45,7 @@ class OAuthServer:
             self.access_token_complete = token_data
         else:
             logger.error("Access token not found in response.")
-            return web.Response(text="⚠️ Error, no se encuentra el parametro code.")
+            return web.Response(text="⚠️ Error, access token can't be obtained.")
 
         # event to close the server
         logger.debug("Sending event to close web server...")

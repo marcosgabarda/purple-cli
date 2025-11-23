@@ -9,6 +9,7 @@ import purple
 
 from .api import (
     retrieve_followed_channels,
+    retrieve_followed_streams,
     retrieve_user,
 )
 from .auth import obtain_access_token
@@ -51,9 +52,9 @@ def live(args: argparse.Namespace) -> None:
     user_id = user["id"]
 
     # get followed channels
-    followed = retrieve_followed_channels(access_token=access_token, user_id=user_id)
+    streams = retrieve_followed_streams(access_token=access_token, user_id=user_id)
 
-    print(json.dumps(followed, indent=2))
+    print(json.dumps(streams, indent=2))
 
 
 def main():
@@ -68,7 +69,7 @@ def main():
         action="store_true",
     )
     parser.add_argument("-V", "--version", help="show version", action="store_true")
-    parser.set_defaults(func=followed)
+    parser.set_defaults(func=live)
 
     args = parser.parse_args()
 
