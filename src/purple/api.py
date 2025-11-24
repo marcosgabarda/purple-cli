@@ -132,17 +132,7 @@ def retrieve_followed_channels(access_token: str, user_id: str) -> list[dict]:
         if total is None:
             total = data["total"]
 
-        followed.extend(
-            [
-                {
-                    "name": channel["broadcaster_name"],
-                    "login": channel["broadcaster_login"],
-                    "id": channel["broadcaster_id"],
-                    "followed_at": channel["followed_at"],
-                }
-                for channel in data["data"]
-            ]
-        )
+        followed.extend(data["data"])
 
         cursor = data["pagination"].get("cursor")
         if cursor:
@@ -179,3 +169,31 @@ def retrieve_followed_streams(access_token: str, user_id: str) -> list[dict]:
             params["after"] = cursor
 
     return streams
+
+
+def retrieve_live_streams(
+    access_token: str,
+    language: list[str] | None = None,
+    size: int | None = None,
+) -> list[dict]:
+    """Retrieve the list of live stream, sorted by viewers.
+
+    It doesn't relay in pagination, because the number of viewers can change between
+    calls, and therefore, it could generate duplicated results.
+    """
+    params: dict[str, str | int | list[str]] = {
+        "type": "live",
+    }
+    if language:
+        params["language"] = language
+    if size:
+        if size > 100:
+            logger.warning("Twitch API supports maximum of 100 items.")
+        params["first"] = size
+
+    with twitch_api_client(access_token) as client:
+        response = client.get("/helix/streams", params=params)
+        raise_for_status(response)
+        data = response.json()
+
+    return data["data"]

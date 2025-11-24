@@ -3,8 +3,37 @@
 import os
 from functools import lru_cache
 from pathlib import Path
+from typing import Any
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+def lazy_settings(cls: type) -> type:
+    """Define a decorator for use a settings instance as a lazy object.
+
+    That it is only initialized when it is called the first time.
+    """
+
+    class LazySettings:
+        """Wrap a Settings class, to allow on need evaluation."""
+
+        _wrapped_settings_class: type[BaseSettings] = cls
+        _wrapped_settings: BaseSettings | None = None
+
+        def __getattr__(self, name: str) -> Any:
+            if not self._wrapped_settings:
+                self._wrapped_settings = self._wrapped_settings_class()
+            return getattr(self._wrapped_settings, name)
+
+        def __setattr__(self, name: str, value: Any) -> None:
+            if name in ("_wrapped_settings_class", "_wrapped_settings"):
+                self.__dict__[name] = value
+            else:
+                if not self._wrapped_settings:
+                    self._wrapped_settings = self._wrapped_settings_class()
+                setattr(self._wrapped_settings, name, value)
+
+    return LazySettings
 
 
 @lru_cache
@@ -24,6 +53,7 @@ def app_data_path() -> Path:
     return Path(data_home)
 
 
+@lazy_settings
 class Settings(BaseSettings):
     """Configuration of the purple script."""
 
@@ -47,4 +77,5 @@ class Settings(BaseSettings):
         return app_data_path() / "auth.json"
 
 
+# Lazy instance of settings to enable on need evaluation of the settings properties
 settings = Settings()
