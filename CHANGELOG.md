@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2025-11-24
+
+### Added
+
+- Option to obtain list of most popular streams.
+- Filter by language the list of streams.
+
+### Fixed
+
+- Early detection of missing environment variables.
+
+## [0.1.0] - 2025-11-23
+
 ### Added
 
 - Complete OAuth flow implemented using asynchronous http server.
