@@ -3,7 +3,7 @@ name = "purple-cli"
 dynamic = ["version"]
 description = "Tool to obtain information from your Twitch account.:"
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.12"
 dependencies = [
     "aiohttp[speedups]>=3.13.2",
     "httpx>=0.28.1",
