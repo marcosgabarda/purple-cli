@@ -12,7 +12,7 @@ The recommended way to install purple is using [pipx](https://pipx.pypa.io/lates
 This could be done by using directly the repository URL:
 
 ```bash
-pipx install git+https://github.com/marcosgabarda/purple-cli
+pipx install git+https://tangled.org/mgabarda.com/purple-cli
 ```
 
 This will add `purple` command to your shell:
